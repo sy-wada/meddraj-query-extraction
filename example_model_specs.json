@@ -1,0 +1,24 @@
+{
+  "models": [
+    {
+      "name": "Base",
+      "run_dirs": ["./outputs/llm_eval/base"],
+      "seeds": [0, 1, 2]
+    },
+    {
+      "name": "Base_Large",
+      "run_dirs": ["./outputs/llm_eval/base_large"],
+      "seeds": [0, 1, 2]
+    },
+    {
+      "name": "PEFT_RL",
+      "run_dirs": ["./outputs/llm_eval/peft_rl"],
+      "seeds": [0, 1, 2]
+    },
+    {
+      "name": "Distill_NER_filtered",
+      "run_dirs": ["./outputs/distill_ner/final"],
+      "seeds": [0, 1, 2]
+    }
+  ]
+}

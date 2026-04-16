@@ -1,0 +1,42 @@
+mdra:
+  format: ./external_assets/meddra/mdra_format.json
+  path: ./external_assets/meddra/MDRA_J
+  syn_path: ./external_assets/meddra/J_Synonym
+  shionogi_path: ./external_assets/local_extension/extension_terms.xlsx
+  exceptions_for_preventing_data_leak:
+  remove_unused_keys: true
+
+model:
+  device: gpu
+  embeddings:
+    embedding_model_path: cl-nagoya/ruri-v3-310m
+    embedding_model_q_prefix: ""
+    model_input_keys:
+      - input_ids
+      - attention_mask
+    batch_size: 64
+  ner:
+    ner_model_path: ./models/modernbert-ja-130m-distill
+    max_seq_length: 4096
+
+evaluate:
+  use_shionogi_db: false
+  apply_similarity_search_to_all_queries: true
+  top_k: 20
+  threshold: 0.70
+  hide_non_current_term_en: true
+  hide_non_current_term_jp: true
+  llt_display_default: "日本語"
+  text_cls_threshold:
+    ae: 0.0
+    pbe: 0.0
+    ss: 0.0
+
+entity_colors:
+  KeyPhrase: "rgba(255, 255, 51, 0.7)"
+  UserKeyPhrase: "rgba(255, 182, 193, 0.5)"
+
+bar_chart_colors:
+  AE: "#ff7777"
+  PBE: "#77dd77"
+  SS: "#7799ff"

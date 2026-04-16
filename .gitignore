@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+unsloth_compiled_cache/
+
+data/
+outputs/
+models/
+
+mdra_suggest/cache/*
+!mdra_suggest/cache/README.md
+
+external_assets/meddra/
+external_assets/local_extension/

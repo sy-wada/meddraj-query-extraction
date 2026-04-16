@@ -1,30 +1,30 @@
-[日本語](./README_ja.md)
+[English](./README.md)
 
 # MedDRA/J Search Query Extraction for Pharmacovigilance
 
-This repository contains the code used in the paper "MedDRA/J Search Query Extraction for Pharmacovigilance: Comparing Reinforcement Learning Optimized Large Language Models with Knowledge Distillation."
+論文「MedDRA/J Search Query Extraction for Pharmacovigilance: Comparing Reinforcement Learning Optimized Large Language Models with Knowledge Distillation」で用いた、MedDRA/J 検索クエリ抽出のためのコード一式です。
 
-This repository includes the following:
+本リポジトリには、以下のコードを含みます。
 
-- LLM training with PEFT-RL
-- Query extraction inference using LLMs
-- Distill KPE model training
-- Distill KPE model evaluation
-- Latency aggregation
-- Statistical aggregation including non-inferiority testing
-- Re-aggregation by AE/SS strata
-- MedDRA/J cache generation
+- PEFT-RL による LLM 学習
+- LLM を用いたクエリ抽出推論
+- Distill KPE モデル学習
+- Distill KPE モデル評価
+- latency 集計
+- 非劣性判定を含む統計集計
+- AE/SS 層別の再集計
+- MedDRA/J キャッシュ生成
 
-This repository does not include the following:
+本リポジトリには以下を含みません。
 
-- Datasets under `data/`
-- Model output JSON files and evaluation results under `outputs/`
-- Trained model weights
-- The MedDRA/J dictionary itself
-- Internal extended dictionaries and internal databases
-- Caches generated under `mdra_suggest/cache/`
+- `data/` 配下のデータセット
+- `outputs/` 配下のモデル出力 JSON や評価結果
+- 学習済みモデル重み
+- MedDRA/J 辞書本体
+- 社内拡張辞書・社内データベース
+- `mdra_suggest/cache/` に生成されるキャッシュ
 
-## Directory Structure
+## ディレクトリ構成
 
 ```text
 .
@@ -46,43 +46,43 @@ This repository does not include the following:
 └── train_ner1_optuna.py
 ```
 
-## Setup
+## セットアップ
 
-This repository assumes the use of `uv`.
+`uv` を使う前提です。
 
 ```bash
 uv sync
 ```
 
-In GPU environments, it assumes that `torch`, `vllm`, and `unsloth` are installed with GPU support. If you use only CPU, PEFT-RL training and vLLM inference cannot run as-is.
+GPU 環境では `torch` / `vllm` / `unsloth` が GPU 対応で入ることを前提にしています。CPU のみで使う場合、PEFT-RL 学習や vLLM 推論はそのままでは実行できません。
 
-## External Assets
+## 外部資産
 
-To run this code, you need to prepare the following assets yourself:
+このコードを動かすには、ユーザー自身で以下を用意してください。
 
-- A dataset that can be loaded with `load_from_disk` in Hugging Face format
-- The MedDRA/J dictionary itself
-- The cache generated under `mdra_suggest/cache/`
-- A local extended dictionary for additional vocabulary if needed
+- Hugging Face 形式で `load_from_disk` 可能なデータセット
+- MedDRA/J 辞書本体
+- `mdra_suggest/cache/` に生成したキャッシュ
+- 必要に応じて追加語彙用のローカル拡張辞書
 
-For placement details, refer to:
+配置の詳細は以下を参照してください。
 
 - `external_assets/README.md`
 - `mdra_suggest/README.md`
 - `mdra_suggest/cache/README.md`
 
-## Examples
+## 実行例
 
-The following examples show the minimal configuration without an extended dictionary. In the public version, `use_shionogi_db`-related flags are disabled unless explicitly specified.
+以下の例は、拡張辞書を使わない最小構成です。公開版では `use_shionogi_db` 系フラグは未指定時に無効です。
 
-### 1. Generate MedDRA/J Cache
+### 1. MedDRA/J キャッシュ生成
 
 ```bash
 uv run python mdra_suggest/create_cache.py \
   --config ./mdra_suggest/config.yml
 ```
 
-### 2. PEFT-RL Training
+### 2. PEFT-RL 学習
 
 ```bash
 uv run python run_grpo-trainer.py \
@@ -100,7 +100,7 @@ uv run python run_grpo-trainer.py \
   --gradient_accumulation_steps 1
 ```
 
-### 3. LLM Inference
+### 3. LLM 推論
 
 ```bash
 uv run python run_inference_with_adapter.py \
@@ -123,7 +123,7 @@ uv run python run_inference_with_adapter.py \
   --code_level llt
 ```
 
-### 4. Distill KPE Training
+### 4. Distill KPE 学習
 
 ```bash
 uv run python train_ner1_optuna.py \
@@ -152,7 +152,7 @@ uv run python train_ner1_optuna.py \
   --bf16 true
 ```
 
-### 5. Distill KPE Evaluation
+### 5. Distill KPE 評価
 
 ```bash
 uv run python scripts/eval_ner1_checkpoint.py \
@@ -166,7 +166,7 @@ uv run python scripts/eval_ner1_checkpoint.py \
   --use_shionogi_db false
 ```
 
-### 6. Aggregate LLM Latency
+### 6. LLM latency 集計
 
 ```bash
 uv run python aggregate_llm_latency_from_jsons.py \
@@ -174,7 +174,7 @@ uv run python aggregate_llm_latency_from_jsons.py \
   --jsons_base ./outputs/jsons
 ```
 
-### 7. Measure Distill / PEFT-RL Latency
+### 7. Distill / PEFT-RL latency 計測
 
 ```bash
 uv run python scripts/measure_peftrl_latency.py \
@@ -195,7 +195,7 @@ uv run python scripts/measure_distill_kpe_latency.py \
   --out_dir ./outputs/summary_test_metrics
 ```
 
-### 8. Statistical Aggregation Including Non-Inferiority
+### 8. 非劣性を含む統計集計
 
 ```bash
 uv run python summarize_test_metrics.py \
@@ -211,7 +211,7 @@ uv run python summarize_test_metrics.py \
   --ni_metric nDCG
 ```
 
-### 9. Re-aggregate by AE/SS Strata
+### 9. AE/SS 層別の再集計
 
 ```bash
 uv run python scripts/summarize_ae_ss_ir_metrics.py \
@@ -225,21 +225,21 @@ uv run python scripts/summarize_ae_ss_ir_metrics.py \
   --out_dir ./outputs/summary_test_metrics
 ```
 
-## Key Files
+## 主要ファイル
 
-- `run_grpo-trainer.py`: PEFT-RL training
-- `run_inference_with_adapter.py`: LLM inference
-- `train_ner1_optuna.py`: Distill KPE training
-- `scripts/eval_ner1_checkpoint.py`: Distill KPE evaluation
-- `aggregate_llm_latency_from_jsons.py`: LLM latency aggregation
-- `summarize_test_metrics.py`: Bootstrap aggregation and non-inferiority testing
-- `scripts/measure_peftrl_latency.py`: PEFT-RL latency measurement
-- `scripts/measure_distill_kpe_latency.py`: Distill KPE latency measurement
-- `scripts/summarize_ae_ss_ir_metrics.py`: Re-aggregation by AE/SS strata
+- `run_grpo-trainer.py`: PEFT-RL 学習
+- `run_inference_with_adapter.py`: LLM 推論
+- `train_ner1_optuna.py`: Distill KPE 学習
+- `scripts/eval_ner1_checkpoint.py`: Distill KPE 評価
+- `aggregate_llm_latency_from_jsons.py`: LLM latency 集計
+- `summarize_test_metrics.py`: bootstrap 集計と非劣性判定
+- `scripts/measure_peftrl_latency.py`: PEFT-RL latency 計測
+- `scripts/measure_distill_kpe_latency.py`: Distill KPE latency 計測
+- `scripts/summarize_ae_ss_ir_metrics.py`: AE/SS 層別再集計
 
-## Limitations
+## 制約事項
 
-- The dataset format assumes the Hugging Face `load_from_disk` format used in the original research.
-- The MedDRA/J dictionary itself is not bundled for licensing reasons.
-- Internal extended dictionaries are not bundled. Replace them with your own local extended dictionary if needed.
-- The default input/output paths in `summarize_test_metrics.py` have been converted to relative paths for the public version, but explicit specification with `--config_json` is recommended in actual use.
+- データセット形式は、元研究で用いた Hugging Face `load_from_disk` 形式を前提にしています。
+- MedDRA/J 本体はライセンス上の理由から同梱していません。
+- 社内拡張辞書は同梱していません。必要な場合はローカル拡張辞書として差し替えてください。
+- `summarize_test_metrics.py` のデフォルト入出力パスは公開版向けに相対パス化していますが、実運用では `--config_json` で明示指定するのを推奨します。
